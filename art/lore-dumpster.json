@@ -1,0 +1,873 @@
+{
+  "tile_width": 8,
+  "tile_height": 8,
+  "palette": [
+    {"r": 0, "g": 0, "b": 0},
+    {"r": 0, "g": 255, "b": 0},
+    {"r": 255, "g": 255, "b": 0},
+    {"r": 0, "g": 0, "b": 255},
+    {"r": 255, "g": 0, "b": 0},
+    {"r": 0, "g": 0, "b": 0},
+    {"r": 0, "g": 0, "b": 0},
+    {"r": 0, "g": 0, "b": 0},
+    {"r": 0, "g": 0, "b": 0},
+    {"r": 0, "g": 0, "b": 0},
+    {"r": 0, "g": 0, "b": 0},
+    {"r": 0, "g": 0, "b": 0},
+    {"r": 0, "g": 0, "b": 0},
+    {"r": 0, "g": 0, "b": 0},
+    {"r": 0, "g": 0, "b": 0},
+    {"r": 0, "g": 0, "b": 0}
+  ],
+  "tags": ["solid", "deadly", "trap", "door", "pushable", "exit"],
+  "tilesets": [
+    {"name": "terrain", "tileset": {
+  "width": 8,
+  "height": 8,
+  "images": [
+    {
+      "name": "floor",
+      "bytes": [
+        17, 17, 17, 17,
+        17, 17, 19, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17,
+        19, 17, 17, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "wall",
+      "bytes": [
+        51, 51, 51, 49,
+        51, 51, 51, 49,
+        51, 51, 51, 49,
+        17, 17, 17, 17,
+        51, 49, 51, 51,
+        51, 49, 51, 51,
+        51, 49, 51, 51,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "wall_slot",
+      "bytes": [
+        51, 51, 51, 49,
+        51, 49, 19, 49,
+        51, 51, 51, 49,
+        17, 17, 17, 17,
+        51, 49, 51, 51,
+        51, 49, 51, 51,
+        51, 49, 51, 51,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "wall_nozzle",
+      "bytes": [
+        51, 51, 51, 49,
+        51, 51, 51, 49,
+        51, 51, 51, 49,
+        17, 17, 17, 17,
+        51, 49, 51, 51,
+        51, 49, 50, 51,
+        51, 49, 51, 51,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "wall_seam",
+      "bytes": [
+        51, 51, 19, 49,
+        51, 51, 19, 49,
+        51, 51, 19, 49,
+        17, 17, 17, 17,
+        51, 49, 51, 51,
+        51, 49, 51, 51,
+        51, 49, 51, 51,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "wall_cracked",
+      "bytes": [
+        51, 51, 19, 49,
+        51, 49, 51, 49,
+        51, 51, 19, 49,
+        17, 17, 17, 17,
+        51, 49, 51, 51,
+        51, 51, 19, 51,
+        51, 51, 49, 51,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "wall_fake",
+      "bytes": [
+        51, 51, 51, 49,
+        51, 51, 51, 49,
+        51, 51, 51, 49,
+        17, 49, 17, 17,
+        51, 49, 51, 51,
+        51, 49, 51, 51,
+        51, 49, 51, 51,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "alcove",
+      "bytes": [
+        51, 51, 51, 51,
+        51, 17, 17, 51,
+        49, 17, 17, 19,
+        49, 17, 17, 19,
+        49, 17, 17, 19,
+        49, 17, 17, 19,
+        49, 17, 17, 19,
+        49, 17, 17, 19
+      ]
+    },
+    {
+      "name": "crusher_shut",
+      "bytes": [
+        68, 68, 68, 65,
+        68, 68, 68, 65,
+        68, 68, 68, 65,
+        17, 17, 17, 17,
+        68, 65, 68, 68,
+        68, 65, 68, 68,
+        68, 65, 68, 68,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "floor_cracked",
+      "bytes": [
+        17, 17, 17, 17,
+        17, 17, 19, 17,
+        17, 17, 17, 49,
+        17, 17, 17, 17,
+        17, 17, 17, 17,
+        19, 17, 17, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "floor_crumble",
+      "bytes": [
+        17, 17, 17, 17,
+        17, 17, 49, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17,
+        19, 17, 17, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "spikes_down",
+      "bytes": [
+        17, 17, 17, 17,
+        19, 17, 19, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17,
+        17, 49, 17, 49,
+        17, 17, 17, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "spikes_up",
+      "bytes": [
+        17, 17, 17, 17,
+        20, 17, 20, 17,
+        68, 65, 68, 65,
+        17, 17, 17, 17,
+        17, 65, 17, 65,
+        20, 68, 20, 68,
+        17, 17, 17, 17,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "plate",
+      "bytes": [
+        17, 17, 17, 17,
+        19, 17, 17, 49,
+        17, 17, 17, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17,
+        19, 17, 17, 49,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "plate_down",
+      "bytes": [
+        17, 17, 17, 17,
+        19, 51, 51, 49,
+        19, 17, 17, 49,
+        19, 17, 17, 49,
+        19, 17, 17, 49,
+        19, 17, 17, 49,
+        19, 51, 51, 49,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "boulder_trigger",
+      "bytes": [
+        17, 17, 17, 17,
+        17, 17, 19, 17,
+        17, 17, 17, 17,
+        17, 18, 49, 17,
+        17, 19, 49, 17,
+        19, 17, 17, 17,
+        17, 17, 17, 17,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "pit",
+      "bytes": [
+        19, 51, 51, 49,
+        51, 51, 51, 51,
+        51, 51, 51, 51,
+        51, 51, 51, 51,
+        51, 51, 51, 51,
+        51, 51, 51, 51,
+        51, 51, 51, 51,
+        19, 51, 51, 49
+      ]
+    },
+    {
+      "name": "pit_filled",
+      "bytes": [
+        19, 51, 51, 49,
+        50, 34, 34, 35,
+        50, 34, 34, 35,
+        50, 34, 34, 35,
+        50, 34, 34, 35,
+        50, 34, 34, 35,
+        50, 34, 34, 35,
+        19, 51, 51, 49
+      ]
+    },
+    {
+      "name": "block",
+      "bytes": [
+        51, 51, 51, 51,
+        50, 34, 34, 35,
+        50, 51, 51, 35,
+        50, 50, 35, 35,
+        50, 50, 35, 35,
+        50, 51, 51, 35,
+        50, 34, 34, 35,
+        51, 51, 51, 51
+      ]
+    },
+    {
+      "name": "rubble",
+      "bytes": [
+        17, 17, 17, 17,
+        17, 34, 17, 17,
+        18, 34, 33, 51,
+        18, 34, 19, 51,
+        17, 17, 51, 49,
+        19, 49, 18, 33,
+        51, 51, 18, 34,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "stairs",
+      "bytes": [
+        34, 34, 34, 34,
+        51, 51, 51, 51,
+        34, 34, 34, 51,
+        51, 51, 51, 51,
+        34, 34, 51, 51,
+        51, 51, 51, 51,
+        34, 51, 51, 51,
+        51, 51, 51, 51
+      ]
+    },
+    {
+      "name": "door_yellow",
+      "bytes": [
+        51, 51, 51, 51,
+        51, 34, 34, 51,
+        50, 34, 34, 35,
+        50, 34, 34, 35,
+        50, 35, 34, 35,
+        50, 35, 34, 35,
+        50, 34, 34, 35,
+        50, 34, 34, 35
+      ]
+    },
+    {
+      "name": "door_red",
+      "bytes": [
+        51, 51, 51, 51,
+        51, 68, 68, 51,
+        52, 68, 68, 67,
+        52, 68, 68, 67,
+        52, 66, 68, 67,
+        52, 66, 68, 67,
+        52, 68, 68, 67,
+        52, 68, 68, 67
+      ]
+    },
+    {
+      "name": "door_blue",
+      "bytes": [
+        34, 34, 34, 34,
+        34, 51, 51, 34,
+        35, 51, 51, 50,
+        35, 51, 51, 50,
+        35, 50, 51, 50,
+        35, 50, 51, 50,
+        35, 51, 51, 50,
+        35, 51, 51, 50
+      ]
+    },
+    {
+      "name": "gate",
+      "bytes": [
+        51, 51, 51, 51,
+        49, 49, 49, 49,
+        49, 49, 49, 49,
+        49, 49, 49, 49,
+        49, 49, 49, 49,
+        49, 49, 49, 49,
+        49, 49, 49, 49,
+        51, 51, 51, 51
+      ]
+    },
+    {
+      "name": "arrow_up",
+      "bytes": [
+        17, 17, 17, 17,
+        17, 18, 33, 17,
+        17, 34, 34, 17,
+        18, 34, 34, 33,
+        17, 18, 33, 17,
+        17, 18, 33, 17,
+        17, 18, 33, 17,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "arrow_down",
+      "bytes": [
+        17, 17, 17, 17,
+        17, 18, 33, 17,
+        17, 18, 33, 17,
+        17, 18, 33, 17,
+        18, 34, 34, 33,
+        17, 34, 34, 17,
+        17, 18, 33, 17,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "arrow_left",
+      "bytes": [
+        17, 17, 17, 17,
+        17, 18, 17, 17,
+        17, 34, 17, 17,
+        18, 34, 34, 33,
+        18, 34, 34, 33,
+        17, 34, 17, 17,
+        17, 18, 17, 17,
+        17, 17, 17, 17
+      ]
+    },
+    {
+      "name": "arrow_right",
+      "bytes": [
+        17, 17, 17, 17,
+        17, 17, 33, 17,
+        17, 17, 34, 17,
+        18, 34, 34, 33,
+        18, 34, 34, 33,
+        17, 17, 34, 17,
+        17, 17, 33, 17,
+        17, 17, 17, 17
+      ]
+    }
+  ]
+}},
+    {"name": "sprites", "tileset": {
+  "width": 8,
+  "height": 8,
+  "images": [
+    {
+      "name": "hero",
+      "bytes": [
+        0, 2, 32, 0,
+        0, 2, 32, 0,
+        0, 51, 51, 0,
+        3, 51, 51, 48,
+        48, 51, 51, 3,
+        0, 51, 51, 0,
+        0, 48, 3, 0,
+        3, 48, 3, 48
+      ]
+    },
+    {
+      "name": "slime",
+      "bytes": [
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 51, 51, 0,
+        3, 35, 50, 48,
+        51, 51, 51, 51,
+        51, 51, 51, 51,
+        3, 51, 51, 48,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "ghost",
+      "bytes": [
+        0, 68, 68, 0,
+        4, 68, 68, 64,
+        68, 36, 66, 68,
+        68, 68, 68, 68,
+        68, 68, 68, 68,
+        68, 68, 68, 68,
+        68, 4, 64, 68,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "eye",
+      "bytes": [
+        0, 0, 0, 0,
+        0, 34, 34, 0,
+        2, 34, 34, 32,
+        34, 35, 50, 34,
+        34, 35, 50, 34,
+        2, 34, 34, 32,
+        0, 34, 34, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "key_yellow",
+      "bytes": [
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        2, 32, 0, 0,
+        35, 50, 0, 0,
+        35, 50, 34, 34,
+        2, 32, 2, 2,
+        0, 0, 0, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "key_red",
+      "bytes": [
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        4, 64, 0, 0,
+        64, 4, 0, 0,
+        64, 4, 68, 68,
+        4, 64, 4, 4,
+        0, 0, 0, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "key_blue",
+      "bytes": [
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        3, 48, 0, 0,
+        48, 3, 0, 0,
+        48, 3, 51, 51,
+        3, 48, 3, 3,
+        0, 0, 0, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "coin",
+      "bytes": [
+        0, 0, 0, 0,
+        0, 34, 34, 0,
+        2, 34, 50, 32,
+        2, 34, 50, 32,
+        2, 34, 50, 32,
+        2, 34, 50, 32,
+        0, 34, 34, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "gem",
+      "bytes": [
+        0, 0, 0, 0,
+        0, 51, 51, 0,
+        3, 50, 51, 48,
+        51, 51, 51, 51,
+        3, 51, 51, 48,
+        0, 51, 51, 0,
+        0, 3, 48, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "potion",
+      "bytes": [
+        0, 2, 32, 0,
+        0, 3, 48, 0,
+        0, 48, 3, 0,
+        3, 0, 0, 48,
+        52, 68, 68, 67,
+        52, 68, 68, 67,
+        3, 68, 68, 48,
+        0, 51, 51, 0
+      ]
+    },
+    {
+      "name": "oneup",
+      "bytes": [
+        0, 0, 0, 0,
+        4, 64, 4, 64,
+        68, 36, 68, 68,
+        68, 68, 68, 68,
+        4, 68, 68, 64,
+        0, 68, 68, 0,
+        0, 4, 64, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "sword1",
+      "bytes": [
+        0, 0, 0, 3,
+        0, 0, 0, 48,
+        0, 0, 3, 0,
+        0, 32, 48, 0,
+        0, 2, 0, 0,
+        0, 32, 32, 0,
+        2, 0, 0, 0,
+        32, 0, 0, 0
+      ]
+    },
+    {
+      "name": "sword2",
+      "bytes": [
+        0, 0, 0, 2,
+        0, 0, 0, 32,
+        0, 0, 2, 0,
+        0, 48, 32, 0,
+        0, 3, 0, 0,
+        0, 48, 48, 0,
+        3, 0, 0, 0,
+        48, 0, 0, 0
+      ]
+    },
+    {
+      "name": "sword3",
+      "bytes": [
+        0, 0, 0, 4,
+        0, 0, 0, 64,
+        0, 0, 4, 0,
+        0, 32, 64, 0,
+        0, 2, 0, 0,
+        0, 32, 32, 0,
+        2, 0, 0, 0,
+        32, 0, 0, 0
+      ]
+    },
+    {
+      "name": "shield1",
+      "bytes": [
+        3, 51, 51, 48,
+        3, 50, 35, 48,
+        3, 50, 35, 48,
+        2, 34, 34, 32,
+        3, 50, 35, 48,
+        0, 50, 35, 0,
+        0, 3, 48, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "shield2",
+      "bytes": [
+        2, 34, 34, 32,
+        2, 35, 50, 32,
+        2, 35, 50, 32,
+        3, 51, 51, 48,
+        2, 35, 50, 32,
+        0, 35, 50, 0,
+        0, 2, 32, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "shield3",
+      "bytes": [
+        4, 68, 68, 64,
+        4, 66, 36, 64,
+        4, 66, 36, 64,
+        2, 34, 34, 32,
+        4, 66, 36, 64,
+        0, 66, 36, 0,
+        0, 4, 64, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "pick",
+      "bytes": [
+        0, 0, 0, 0,
+        0, 51, 51, 0,
+        3, 0, 32, 48,
+        48, 2, 0, 3,
+        0, 32, 0, 0,
+        2, 0, 0, 0,
+        32, 0, 0, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "lamp",
+      "bytes": [
+        0, 3, 48, 0,
+        0, 48, 3, 0,
+        3, 51, 51, 48,
+        3, 34, 34, 48,
+        3, 34, 34, 48,
+        3, 34, 34, 48,
+        3, 51, 51, 48,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "bomb",
+      "bytes": [
+        0, 0, 0, 2,
+        0, 0, 0, 48,
+        0, 51, 51, 48,
+        3, 51, 51, 48,
+        3, 35, 51, 48,
+        3, 51, 51, 48,
+        0, 51, 51, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "sign",
+      "bytes": [
+        0, 0, 0, 0,
+        34, 34, 34, 34,
+        35, 51, 51, 50,
+        34, 34, 34, 34,
+        35, 51, 35, 50,
+        34, 34, 34, 34,
+        0, 3, 48, 0,
+        0, 3, 48, 0
+      ]
+    },
+    {
+      "name": "shopkeeper",
+      "bytes": [
+        0, 51, 51, 0,
+        0, 2, 32, 0,
+        0, 2, 32, 0,
+        4, 68, 68, 64,
+        68, 68, 68, 68,
+        4, 68, 68, 64,
+        4, 68, 68, 64,
+        4, 64, 4, 64
+      ]
+    },
+    {
+      "name": "arrow_h",
+      "bytes": [
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        32, 0, 4, 64,
+        68, 68, 68, 68,
+        32, 0, 4, 64,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0
+      ]
+    },
+    {
+      "name": "arrow_v",
+      "bytes": [
+        0, 36, 32, 0,
+        0, 4, 0, 0,
+        0, 4, 0, 0,
+        0, 4, 0, 0,
+        0, 4, 0, 0,
+        0, 68, 64, 0,
+        0, 68, 64, 0,
+        0, 4, 0, 0
+      ]
+    },
+    {
+      "name": "flame",
+      "bytes": [
+        0, 64, 4, 0,
+        4, 68, 4, 64,
+        4, 66, 68, 64,
+        68, 34, 36, 68,
+        68, 34, 34, 68,
+        68, 66, 36, 68,
+        4, 68, 68, 64,
+        0, 68, 68, 0
+      ]
+    },
+    {
+      "name": "boulder",
+      "bytes": [
+        0, 51, 51, 0,
+        3, 51, 51, 48,
+        51, 35, 51, 51,
+        51, 51, 51, 35,
+        51, 51, 51, 51,
+        50, 51, 51, 51,
+        3, 51, 51, 48,
+        0, 51, 51, 0
+      ]
+    }
+  ]
+}}
+  ],
+  "terrain_sets": [
+    {"name": "dungeon", "default": "floor", "terrains": [
+      {"name": "floor", "tags": [], "tileset": "terrain", "image": "floor"},
+      {"name": "wall", "tags": ["solid"], "tileset": "terrain", "image": "wall"},
+      {"name": "wall_slot", "tags": ["solid", "trap"], "tileset": "terrain", "image": "wall_slot"},
+      {"name": "wall_nozzle", "tags": ["solid", "trap"], "tileset": "terrain", "image": "wall_nozzle"},
+      {"name": "wall_seam", "tags": ["solid", "trap"], "tileset": "terrain", "image": "wall_seam"},
+      {"name": "wall_cracked", "tags": ["solid"], "tileset": "terrain", "image": "wall_cracked"},
+      {"name": "wall_fake", "tags": [], "tileset": "terrain", "image": "wall_fake"},
+      {"name": "alcove", "tags": ["solid"], "tileset": "terrain", "image": "alcove"},
+      {"name": "crusher_shut", "tags": ["solid", "deadly"], "tileset": "terrain", "image": "crusher_shut"},
+      {"name": "floor_cracked", "tags": ["trap"], "tileset": "terrain", "image": "floor_cracked"},
+      {"name": "floor_crumble", "tags": ["trap"], "tileset": "terrain", "image": "floor_crumble"},
+      {"name": "spikes_down", "tags": ["trap"], "tileset": "terrain", "image": "spikes_down"},
+      {"name": "spikes_up", "tags": ["deadly", "trap"], "tileset": "terrain", "image": "spikes_up"},
+      {"name": "plate", "tags": ["trap"], "tileset": "terrain", "image": "plate"},
+      {"name": "plate_down", "tags": ["trap"], "tileset": "terrain", "image": "plate_down"},
+      {"name": "boulder_trigger", "tags": ["trap"], "tileset": "terrain", "image": "boulder_trigger"},
+      {"name": "pit", "tags": ["deadly"], "tileset": "terrain", "image": "pit"},
+      {"name": "pit_filled", "tags": [], "tileset": "terrain", "image": "pit_filled"},
+      {"name": "block", "tags": ["solid", "pushable"], "tileset": "terrain", "image": "block"},
+      {"name": "rubble", "tags": ["solid"], "tileset": "terrain", "image": "rubble"},
+      {"name": "stairs", "tags": ["exit"], "tileset": "terrain", "image": "stairs"},
+      {"name": "door_yellow", "tags": ["solid", "door"], "tileset": "terrain", "image": "door_yellow"},
+      {"name": "door_red", "tags": ["solid", "door"], "tileset": "terrain", "image": "door_red"},
+      {"name": "door_blue", "tags": ["solid", "door"], "tileset": "terrain", "image": "door_blue"},
+      {"name": "gate", "tags": ["solid"], "tileset": "terrain", "image": "gate"},
+      {"name": "arrow_up", "tags": [], "tileset": "terrain", "image": "arrow_up"},
+      {"name": "arrow_down", "tags": [], "tileset": "terrain", "image": "arrow_down"},
+      {"name": "arrow_left", "tags": [], "tileset": "terrain", "image": "arrow_left"},
+      {"name": "arrow_right", "tags": [], "tileset": "terrain", "image": "arrow_right"}
+    ]}
+  ],
+  "maps": [
+    {"name": "swatch", "terrain_set": "dungeon", "columns": 12, "rows": 12,
+      "terrains": ["wall", "wall_slot", "wall_nozzle", "wall_seam", "floor", "spikes_down", "spikes_up", "floor_cracked", "floor_crumble", "plate", "door_yellow", "door_blue", "door_red", "wall_cracked", "wall_fake", "block", "pit", "pit_filled", "rubble", "boulder_trigger", "alcove", "arrow_right", "arrow_up", "arrow_down", "arrow_left", "gate", "plate_down", "crusher_shut", "stairs"],
+      "cells": [
+        0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 3, 0,
+        0, 4, 4, 4, 5, 4, 6, 4, 4, 4, 4, 0,
+        0, 4, 7, 4, 4, 8, 4, 4, 4, 9, 4, 0,
+        0, 0, 10, 0, 11, 0, 12, 0, 13, 0, 14, 0,
+        0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0,
+        0, 4, 15, 4, 16, 4, 17, 4, 18, 4, 4, 0,
+        0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 19, 20,
+        0, 4, 21, 22, 23, 24, 4, 4, 4, 4, 25, 0,
+        0, 4, 4, 4, 26, 4, 4, 4, 27, 4, 4, 0,
+        0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0,
+        0, 4, 4, 4, 4, 4, 4, 4, 28, 4, 4, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+      ],
+      "characters": [],
+      "features": [],
+      "cell_tags": []}
+  ],
+  "sprite_sets": [
+    {"name": "things", "sprites": [
+      {"name": "hero", "tileset": "sprites", "image": "hero", "transparent": 0},
+      {"name": "slime", "tileset": "sprites", "image": "slime", "transparent": 0},
+      {"name": "ghost", "tileset": "sprites", "image": "ghost", "transparent": 0},
+      {"name": "eye", "tileset": "sprites", "image": "eye", "transparent": 0},
+      {"name": "key_yellow", "tileset": "sprites", "image": "key_yellow", "transparent": 0},
+      {"name": "key_red", "tileset": "sprites", "image": "key_red", "transparent": 0},
+      {"name": "key_blue", "tileset": "sprites", "image": "key_blue", "transparent": 0},
+      {"name": "coin", "tileset": "sprites", "image": "coin", "transparent": 0},
+      {"name": "gem", "tileset": "sprites", "image": "gem", "transparent": 0},
+      {"name": "potion", "tileset": "sprites", "image": "potion", "transparent": 0},
+      {"name": "oneup", "tileset": "sprites", "image": "oneup", "transparent": 0},
+      {"name": "sword1", "tileset": "sprites", "image": "sword1", "transparent": 0},
+      {"name": "sword2", "tileset": "sprites", "image": "sword2", "transparent": 0},
+      {"name": "sword3", "tileset": "sprites", "image": "sword3", "transparent": 0},
+      {"name": "shield1", "tileset": "sprites", "image": "shield1", "transparent": 0},
+      {"name": "shield2", "tileset": "sprites", "image": "shield2", "transparent": 0},
+      {"name": "shield3", "tileset": "sprites", "image": "shield3", "transparent": 0},
+      {"name": "pick", "tileset": "sprites", "image": "pick", "transparent": 0},
+      {"name": "lamp", "tileset": "sprites", "image": "lamp", "transparent": 0},
+      {"name": "bomb", "tileset": "sprites", "image": "bomb", "transparent": 0},
+      {"name": "sign", "tileset": "sprites", "image": "sign", "transparent": 0},
+      {"name": "shopkeeper", "tileset": "sprites", "image": "shopkeeper", "transparent": 0},
+      {"name": "arrow_h", "tileset": "sprites", "image": "arrow_h", "transparent": 0},
+      {"name": "arrow_v", "tileset": "sprites", "image": "arrow_v", "transparent": 0},
+      {"name": "flame", "tileset": "sprites", "image": "flame", "transparent": 0},
+      {"name": "boulder", "tileset": "sprites", "image": "boulder", "transparent": 0}
+    ]}
+  ],
+  "params": [],
+  "sounds": [
+    {"name": "coin", "text": "T200 O4 L32 EG>C", "loop": false},
+    {"name": "key", "text": "T200 O4 L32 CEGB>C", "loop": false},
+    {"name": "item", "text": "T180 O3 L16 CEG>CEG", "loop": false},
+    {"name": "gem", "text": "T220 O5 L32 CEG>C<G>C", "loop": false},
+    {"name": "oneup", "text": "T180 O4 L16 CEG>C<G>C L8 E", "loop": false},
+    {"name": "potion", "text": "T160 O3 L16 CDEFGA", "loop": false},
+    {"name": "door", "text": "T160 O2 L16 CDE-F", "loop": false},
+    {"name": "bump", "text": "T240 O1 L32 C", "loop": false},
+    {"name": "push", "text": "T200 O1 L32 CD", "loop": false},
+    {"name": "hit", "text": "T240 O3 L32 C<G", "loop": false},
+    {"name": "ouch", "text": "T240 O2 L32 E-C<A", "loop": false},
+    {"name": "slain", "text": "T200 O3 L32 GEC<G<C", "loop": false},
+    {"name": "dead", "text": "T160 O3 L8 GF+FE L2 E-", "loop": false},
+    {"name": "gameover", "text": "T120 O3 L8 GFED-C<B-AG L2 E-", "loop": false},
+    {"name": "trap_click", "text": "T240 O4 L64 C P64 C", "loop": false},
+    {"name": "fire", "text": "T240 O1 L64 CDCDCDCD", "loop": false},
+    {"name": "arrow", "text": "T240 O5 L64 C<A<F<D", "loop": false},
+    {"name": "crusher", "text": "T200 O2 L16 C<C", "loop": false},
+    {"name": "boulder", "text": "T120 O1 L16 CC#CC#CC#CC#", "loop": false},
+    {"name": "crumble", "text": "T240 O2 L64 DCDC<B", "loop": false},
+    {"name": "clear", "text": "T180 O3 L16 CEG>CEG>C4", "loop": false},
+    {"name": "checkpoint", "text": "T150 O3 L8 CEG>C4<G>C2", "loop": false},
+    {"name": "buy", "text": "T220 O4 L32 GB>D", "loop": false},
+    {"name": "nope", "text": "T200 O2 L16 FC", "loop": false},
+    {"name": "page", "text": "T240 O4 L64 E", "loop": false}
+  ],
+  "feature_types": [],
+  "features": [],
+  "item_types": [],
+  "inventories": [],
+  "trigger_types": [],
+  "triggers": [],
+  "character_types": [],
+  "characters": [],
+  "player": null
+}
