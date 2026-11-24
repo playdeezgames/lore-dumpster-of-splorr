@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repository is
 
-**Lore Dumpster of SPLORR!!**, created November 24, 2026 (private, local; no GitHub remote yet). A turn-based puzzle adventure in TRS-80 Color Computer `PMODE 1` style: 128 by 96, four colours (green `#00FF00`, yellow `#FFFF00`, blue `#0000FF`, red `#FF0000`), 8 by 8 cells on a 16 by 12 cell screen (a 12 by 12 room plus a 4-cell text panel of 8 characters by 16 lines, using the Anvil's default 4 by 6 font).
+**Lore Dumpster of SPLORR!!**, created November 24, 2026 (GitHub `playdeezgames/lore-dumpster-of-splorr`, private; nothing pushed until the user says "push"). A turn-based puzzle adventure in TRS-80 Color Computer `PMODE 1` style: 128 by 96, four colours (green `#00FF00`, yellow `#FFFF00`, blue `#0000FF`, red `#FF0000`), 8 by 8 cells on a 16 by 12 cell screen (a 12 by 12 room plus a 4-cell text panel of 8 characters by 16 lines, using the Anvil's default 4 by 6 font).
 
 **The design lives in the vault note** `/home/yermom/git/bok-of-splorr/splorr/Games/Lore Dumpster of SPLORR!!.md`, which records every decision the user made (marked "the user") and the agent's accepted proposals. Read it first and keep it current; read the vault's `Home.md` for the standing rules.
 
