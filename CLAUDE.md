@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repository is
 
-**Lore Dumpster of SPLORR!!**, created November 24, 2026 (GitHub `playdeezgames/lore-dumpster-of-splorr`, private; nothing pushed until the user says "push"). A turn-based puzzle adventure in TRS-80 Color Computer `PMODE 1` style: 128 by 96, four colours (green `#00FF00`, yellow `#FFFF00`, blue `#0000FF`, red `#FF0000`), 8 by 8 cells on a 16 by 12 cell screen (a 12 by 12 room plus a 4-cell text panel of 8 characters by 16 lines, using the Anvil's default 4 by 6 font).
+**Lore Dumpster of SPLORR!!**, created November 24, 2026 (GitHub `playdeezgames/lore-dumpster-of-splorr`; nothing pushed until the user says "push"). GitHub Pages from `main` `/docs` (prepared November 24, 2026: `tools/pages.sh`, commit `docs/`, push); the portal entry is in `oeuvre-of-splorr/docs/games.json`. A turn-based puzzle adventure in TRS-80 Color Computer `PMODE 1` style: 128 by 96, four colours (green `#00FF00`, yellow `#FFFF00`, blue `#0000FF`, red `#FF0000`), 8 by 8 cells on a 16 by 12 cell screen (a 12 by 12 room plus a 4-cell text panel of 8 characters by 16 lines, using the Anvil's default 4 by 6 font).
 
 **The design lives in the vault note** `/home/yermom/git/bok-of-splorr/splorr/Games/Lore Dumpster of SPLORR!!.md`, which records every decision the user made (marked "the user") and the agent's accepted proposals. Read it first and keep it current; read the vault's `Home.md` for the standing rules.
 
@@ -18,6 +18,8 @@ Odin is on `PATH` (`odin`).
 tools/test.sh                  # native tests, wasm checks of both packages, then a real wasm build
 tools/build.sh [--size]        # wasm build into build/web (copies web/index.html, sounds.js, lootlocker.js, sfx/)
 tools/serve.sh                 # build and serve on http://localhost:${PORT:-8154}/
+tools/pages.sh                 # tests, size build, copy into docs/ for GitHub Pages; never commits or pushes
+tools/dump.sh out.png LEVEL [SCRIPT] [ZOOM]   # render a frame natively (LEVEL 0-based, -1 the title); assets/screenshots/ and the portal image come from it
 python3 -I tools/gen_gfx.py    # regenerate gfx.odin, font.odin, sounds.odin and web/sounds.js from art/
 odin test src/game -collection:tggd=src -define:ODIN_TEST_THREADS=1 -define:ODIN_TEST_NAMES=game.trace -define:TRACE_LEVEL=2 -define:TRACE_SCRIPT=EEE.S   # print the state after each move of a script on a level (0-based); N S W E . o(bomb) R(restart) ' '(OK) n(no)
 ```
