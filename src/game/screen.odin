@@ -46,12 +46,21 @@ fill_rect :: proc(f: ^Frame, x, y, w, h: int, c: u8) {
 }
 
 // Draws an 8x8 picture; colour 0 is transparent.
-draw_gfx :: proc(f: ^Frame, g: Gfx, x, y: int) {
+// Draws a picture; flip_x and flip_y mirror it (an arrow drawn pointing east or south can face
+// west or north).
+draw_gfx :: proc(f: ^Frame, g: Gfx, x, y: int, flip_x := false, flip_y := false) {
 	pic := &GFX[g]
 	for i in 0 ..< CELL * CELL {
 		c := pic[i]
 		if c != 0 {
-			set_px(f, x + i % CELL, y + i / CELL, c)
+			px, py := i % CELL, i / CELL
+			if flip_x {
+				px = CELL - 1 - px
+			}
+			if flip_y {
+				py = CELL - 1 - py
+			}
+			set_px(f, x + px, y + py, c)
 		}
 	}
 }

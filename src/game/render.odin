@@ -171,7 +171,8 @@ draw_room :: proc(f: ^Frame, g: ^Game) {
 	}
 	for a in g.arrows {
 		if a.live && in_room(a.x, a.y) && shown(g, a.x, a.y) {
-			draw_gfx(f, .Arrow_H if a.dy == 0 else .Arrow_V, a.x * CELL, a.y * CELL)
+			// The pictures point east and south.
+			draw_gfx(f, .Arrow_H if a.dy == 0 else .Arrow_V, a.x * CELL, a.y * CELL, a.dx < 0, a.dy < 0)
 		}
 	}
 	if g.phase != .Dead || g.death != "FELL" {
