@@ -796,6 +796,14 @@ step :: proc(g: ^Game, dx, dy: int) {
 		die(g, "FELL")
 		return
 	}
+	// Walking into an arrow is as bad as an arrow walking into you (else the two swap cells).
+	for &a in g.arrows {
+		if a.live && a.x == nx && a.y == ny {
+			a.live = false
+			die(g, "SHOT")
+			return
+		}
+	}
 	pick_up(g)
 	if t == .Stairs {
 		clear_level(g)

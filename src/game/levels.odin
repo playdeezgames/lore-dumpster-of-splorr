@@ -21,7 +21,7 @@ Level :: struct {
 	dark:    bool,
 }
 
-LEVEL_COUNT :: 4
+LEVEL_COUNT :: 5
 
 TITLE_PAGE := []string {
 	"LORE DUMPSTER OF SPLORR!!",
@@ -48,7 +48,7 @@ WON_PAGE := []string {
 	"THE PART OF THE VAULT THAT HAS",
 	"BEEN BUILT. THE REST IS LORE.",
 	"",
-	"TWENTY-SIX MORE LEVELS ARE",
+	"TWENTY-FIVE MORE LEVELS ARE",
 	"BEING DUMPED. THE LORE IS",
 	"ALREADY THERE, WAITING, LIKE",
 	"THE MILLIONTH SHEEP IN COUNTING",
@@ -227,5 +227,41 @@ LEVELS := [LEVEL_COUNT]Level {
 			"LEFT NO PELTS. GROWTH MINDSET.",
 		},
 		carries = {.Shield},
+	},
+	{
+		name = "BASEMENT",
+		dark = true,
+		rows = {
+			"############",
+			"#@..h.....L#",
+			"#.#...####.#",
+			"#.#$...$.#.#",
+			"#.#.###.##.#",
+			"#..........s",
+			"#########.##",
+			"#b$f.....$.#",
+			"####.#######",
+			"#*B.....gY.#",
+			"##########X#",
+			"############",
+		},
+		intro = {
+			"LEVEL 5: THE BASEMENT",
+			"",
+			"THE LIGHTS DOWN HERE WERE CUT",
+			"BY ACTIVISTS FROM ROOMBA RIGHTS",
+			"OF SPLORR!!, SO THAT SOMEBODY",
+			"COULD FINALLY NAP. NOBODY HAS.",
+			"",
+			"A TALKING LAMP CALLED L.A.M.P.",
+			"ONCE LIT THE WAY. IT WAS A CAR",
+			"BEFORE THE BUDGET CUTS. IT",
+			"STILL SAYS MICHAEL A LOT.",
+			"",
+			"IN THE DARK YOU SEE ONLY WHAT",
+			"YOU ARE STANDING NEXT TO. THE",
+			"DARK SEES A BIT MORE THAN THAT.",
+		},
+		carries = {.Key_Yellow},
 	},
 }

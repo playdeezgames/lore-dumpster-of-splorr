@@ -197,7 +197,7 @@ level_three_walkthrough :: proc(t: ^testing.T) {
 	g := new(Game)
 	defer free(g)
 	start(g, 2)
-	run(g, "EEEWWWS.SSoSSSNNNEEEEENEENEW..SSSSSSSSWWWWWWWS")
+	run(g, "EEEWWWS..SSoSSSNNNEEEEENEENEW..SSSSSSSSWWWWWWW")
 	testing.expect_value(t, g.level, 3)
 	testing.expect_value(t, g.phase, Phase.Lore)
 }
@@ -216,7 +216,50 @@ level_four_walkthrough :: proc(t: ^testing.T) {
 	found, _ := gems_in_block(g)
 	testing.expect_value(t, found, 1)
 	run(g, "S")
+	testing.expect_value(t, g.level, 4)
+	testing.expect_value(t, g.phase, Phase.Lore)
+}
+
+@(test)
+level_five_walkthrough :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 4)
+	// Round the hidden pit, both coins in the middle room, the lamp, down the east shaft (the
+	// arrows shoot the ghost, which drops the yellow key), the secret room's blue key, the gem
+	// behind the blue door, the yellow door, the stairs.
+	run(g, "EESEESWWEEEEWWNNEEEEESSSSWSSWWWWWWWWEEESSWWWWEEEEEEEEEE")
+	testing.expect(t, g.p.lamp, "the lamp")
+	testing.expect_value(t, g.p.money, 4 * COIN_VALUE)
+	found, _ := gems_in_block(g)
+	testing.expect_value(t, found, 1)
+	run(g, "S")
 	testing.expect_value(t, g.phase, Phase.Won)
+}
+
+@(test)
+the_basement_is_dark :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 4)
+	testing.expect(t, lit(g, 2, 2), "next to the player")
+	testing.expect(t, !lit(g, 3, 1), "two cells away")
+	run(g, "EESEENEEEEE")
+	testing.expect(t, g.p.lamp, "the lamp")
+	testing.expect(t, lit(g, 1, 10), "everything, with the lamp")
+}
+
+@(test)
+walking_into_an_arrow_shoots_you :: proc(t: ^testing.T) {
+	// Level 3: the slot at (0, 3) fires on turn 8; the arrow appears at (1, 3), right under (1, 2).
+	g := new(Game)
+	defer free(g)
+	start(g, 2)
+	run(g, "EEEWWWS.")
+	testing.expect_value(t, g.turn, 8)
+	run(g, "S")
+	testing.expect_value(t, g.phase, Phase.Dead)
+	testing.expect_value(t, g.death, "SHOT")
 }
 
 @(test)
