@@ -1,0 +1,202 @@
+#+build !js
+package game
+
+import "core:testing"
+
+// Runs a script of moves: N S W E, '.' waits, 'o' bombs, 'R' restarts, ' ' is OK on a page.
+run :: proc(g: ^Game, script: string) {
+	for ch in script {
+		switch ch {
+		case 'N':
+			command(g, .North)
+		case 'S':
+			command(g, .South)
+		case 'W':
+			command(g, .West)
+		case 'E':
+			command(g, .East)
+		case '.':
+			command(g, .Wait)
+		case 'o':
+			command(g, .Bomb)
+		case 'R':
+			command(g, .Restart)
+		case ' ':
+			command(g, .Ok)
+		case 'n':
+			command(g, .Cancel)
+		}
+	}
+}
+
+// A new game, past the title and the first lore page, on level `level`.
+start :: proc(g: ^Game, level := 0) {
+	init_game(g)
+	command(g, .Ok)
+	if level > 0 {
+		enter_level(g, level)
+	}
+	command(g, .Ok)
+}
+
+@(test)
+pages_fit :: proc(t: ^testing.T) {
+	check :: proc(t: ^testing.T, page: []string) {
+		testing.expect(t, len(page) <= PAGE_ROWS - 1, "a page has too many lines")
+		for line in page {
+			testing.expectf(t, len(line) <= PAGE_COLS, "line too long: %q", line)
+		}
+	}
+	check(t, TITLE_PAGE)
+	check(t, WON_PAGE)
+	check(t, GAME_OVER_LINES)
+	for &lv in LEVELS {
+		check(t, lv.intro)
+		for s in lv.signs {
+			check(t, s)
+		}
+		testing.expectf(t, len(lv.name) <= PANEL_COLS, "level name too long: %q", lv.name)
+	}
+}
+
+@(test)
+grids_are_whole :: proc(t: ^testing.T) {
+	for &lv, li in LEVELS {
+		starts, signs := 0, 0
+		for row in lv.rows {
+			testing.expectf(t, len(row) == ROOM, "level %d: a row is %d wide", li + 1, len(row))
+			for ch in transmute([]u8)row {
+				if ch == '@' {
+					starts += 1
+				}
+				if ch == '?' {
+					signs += 1
+				}
+			}
+		}
+		testing.expectf(t, starts == 1, "level %d: %d starts", li + 1, starts)
+		testing.expectf(t, signs == len(lv.signs), "level %d: %d signs, %d pages", li + 1, signs, len(lv.signs))
+	}
+}
+
+@(test)
+level_one_walkthrough :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g)
+	testing.expect_value(t, g.phase, Phase.Play)
+	run(g, "SSSSEEEEEEESSNNWWNNNEEENEE")
+	testing.expect_value(t, g.level, 1)
+	testing.expect_value(t, g.phase, Phase.Lore)
+	testing.expect_value(t, g.p.money, COIN_VALUE)
+	testing.expect_value(t, g.p.keys[0], 0) // the yellow key went into the door
+}
+
+@(test)
+block_fills_pit :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 1)
+	run(g, "SSSSEEEE")
+	testing.expect_value(t, g.terrain[5][6], Terrain.Filled_Pit)
+	testing.expect_value(t, g.x, 5)
+	run(g, "E")
+	testing.expect_value(t, g.x, 6)
+	testing.expect_value(t, g.phase, Phase.Play)
+}
+
+@(test)
+hidden_pit_kills_and_restart_costs_a_life :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 1)
+	run(g, "SSSSSE")
+	testing.expect_value(t, g.phase, Phase.Dead)
+	testing.expect_value(t, g.death, "FELL")
+	run(g, " ")
+	testing.expect_value(t, g.lives, START_LIVES - 1)
+	testing.expect_value(t, g.phase, Phase.Play)
+	testing.expect_value(t, g.x, 1)
+	testing.expect_value(t, g.y, 1)
+	testing.expect_value(t, g.terrain[6][2], Terrain.Hidden_Pit) // the level is reset
+}
+
+@(test)
+restart_puts_the_player_back :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g)
+	run(g, "EE")
+	testing.expect_value(t, g.p.money, COIN_VALUE)
+	run(g, "Rn")
+	testing.expect_value(t, g.phase, Phase.Play)
+	testing.expect_value(t, g.lives, START_LIVES)
+	run(g, "R ")
+	testing.expect_value(t, g.lives, START_LIVES - 1)
+	testing.expect_value(t, g.p.money, 0)
+	testing.expect(t, item_at(g, 3, 1, .Coin) >= 0, "the coin is back")
+}
+
+@(test)
+spikes_keep_time :: proc(t: ^testing.T) {
+	// Level 2: stand by the spikes at (4, 2) and step on while they are down and off before they rise.
+	g := new(Game)
+	defer free(g)
+	start(g, 1)
+	run(g, "SEE") // (3, 2), turn 3
+	testing.expect_value(t, g.turn, 3)
+	run(g, "E") // turn 4: spikes up on turns 2, 5, 8...
+	testing.expect_value(t, g.phase, Phase.Play)
+	run(g, ".")
+	testing.expect_value(t, g.phase, Phase.Dead)
+	testing.expect_value(t, g.death, "SPIKED")
+}
+
+@(test)
+game_over_returns_to_the_checkpoint :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g)
+	run(g, "EE") // a coin, not banked yet
+	for _ in 0 ..< START_LIVES {
+		run(g, "R ")
+	}
+	testing.expect_value(t, g.phase, Phase.Game_Over)
+	run(g, " ")
+	testing.expect_value(t, g.level, 0)
+	testing.expect_value(t, g.lives, START_LIVES)
+	testing.expect_value(t, g.p.money, 0)
+	testing.expect(t, item_at(g, 3, 1, .Coin) >= 0, "the unbanked coin went back into its level")
+}
+
+@(test)
+red_key_carries_to_the_next_level :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g)
+	// Down to the secret room through the fake wall at (4, 9) for the red key, then out and up.
+	testing.expect(t, g.secret[9][2], "the key room starts secret")
+	run(g, "SSSSEEEEEEESSSSWWWWWW")
+	testing.expect(t, !g.secret[9][2], "walking through the fake wall uncovers it") // (8, 5), down to (8, 9), west through the fake wall to (2, 9)
+	testing.expect_value(t, g.p.keys[1], 1)
+}
+
+// Known solutions: if a level change breaks one, the level may no longer be solvable.
+@(test)
+level_two_walkthrough :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 1)
+	run(g, "SEEEENEEEEESSNWWWWW.WWWWSSSEEEEEEEESESSWSSSE")
+	testing.expect_value(t, g.level, 2)
+	testing.expect_value(t, g.phase, Phase.Lore)
+}
+
+@(test)
+level_three_walkthrough :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 2)
+	run(g, "EEEWWWS.SSoSSSNNNEEEEENEENEW..SSSSSSSSWWWWWWWS")
+	testing.expect_value(t, g.phase, Phase.Won)
+}

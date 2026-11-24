@@ -1,0 +1,196 @@
+package game
+
+// The levels and the lore. Pages are at most PAGE_COLS characters by PAGE_ROWS - 1 lines (the last
+// line is the "SPACE" prompt); level_test.odin checks every page and grid.
+//
+// Grid legend (12 by 12, one '@'):
+//   terrain   . floor  # wall  s arrow slot  n fire nozzle  m crusher seam  c cracked wall
+//             f fake wall  a alcove  h hidden pit  u crumbling floor  ^ spikes  p pressure plate
+//             O pit  % rubble  X stairs  Y R B doors  G gate  A V < > one-way floor  = block
+//   things    @ start  $ coin  * gem  + potion  1 extra life  / sword  ) shield  t pick  L lamp
+//             o bomb  ? sign (pages in `signs`, in reading order)  y r b keys
+//   monsters  S slime (patrols east-west)  Z slime (north-south)  g ghost (chases)  E eye (stays put)
+//             `carries` gives what each monster drops, in reading order (.None for nothing).
+
+Level :: struct {
+	name:    string, // at most 8 characters, for the panel
+	rows:    [ROOM]string,
+	intro:   []string,
+	signs:   [][]string,
+	carries: []Item_Kind,
+	dark:    bool,
+}
+
+LEVEL_COUNT :: 3
+
+TITLE_PAGE := []string {
+	"LORE DUMPSTER OF SPLORR!!",
+	"",
+	"IN THE BEGINNING THERE WERE",
+	"SIXTEEN COLORS.",
+	"THEN THE INVESTORS OF SPLORR!!",
+	"BOUGHT TWELVE OF THEM IN A",
+	"LEVERAGED BUYOUT.",
+	"FOUR REMAIN: GREEN, YELLOW,",
+	"BLUE AND RED. THE DEVELOPER",
+	"CALLS THIS AN AESTHETIC.",
+	"YOU ARE A HERO. TECHNICALLY",
+	"YOU ARE A FEW PIXELS, BUT THE",
+	"BUDGET SAID HERO.",
+	"DESCEND THE VAULT. RECOVER THE",
+	"LOST COLORS. HARDWARE SAYS NO.",
+}
+
+WON_PAGE := []string {
+	"END OF THE DEMO DUMPSTER",
+	"",
+	"YOU HAVE REACHED THE BOTTOM OF",
+	"THE PART OF THE VAULT THAT HAS",
+	"BEEN BUILT. THE REST IS LORE.",
+	"",
+	"TWENTY-SEVEN MORE LEVELS ARE",
+	"BEING DUMPED. THE LORE IS",
+	"ALREADY THERE, WAITING, LIKE",
+	"THE BUS IN BUS ANTICIPATOR OF",
+	"SPLORR!!, WHICH ALSO NEVER",
+	"ARRIVES.",
+	"",
+	"NO COLORS WERE RECOVERED. THE",
+	"HARDWARE IS RELIEVED.",
+}
+
+GAME_OVER_LINES := []string {
+	"GAME OVER",
+	"",
+	"YOUR LIVES HAVE BEEN COLLECTED",
+	"BY THE INVESTORS OF SPLORR!!",
+	"FOR TAX PURPOSES.",
+	"",
+	"PICK A CHECKPOINT. LIVES REFILL.",
+	"WHAT YOU HAD THERE COMES BACK.",
+	"WHAT YOU FOUND SINCE GOES HOME.",
+}
+
+LEVELS := [LEVEL_COUNT]Level {
+	{
+		name = "LOBBY",
+		rows = {
+			"############",
+			"#@.$...#..X#",
+			"#......Y...#",
+			"#..?...#...#",
+			"#......#####",
+			"#.$........#",
+			"#.....#....#",
+			"#.....#.y..#",
+			"#######....#",
+			"#.r.f..$...#",
+			"#...#......#",
+			"############",
+		},
+		intro = {
+			"LEVEL 1: THE LOBBY",
+			"",
+			"THE VAULT OF SPLORR!! WAS BUILT",
+			"BY THE CONTRACTOR WHO DID THE",
+			"BIN IN COMPOSTERS OF SPLORR!!.",
+			"IT SHOWS.",
+			"",
+			"ARROWS OR WASD MOVE. BUMP A",
+			"THING TO FIGHT IT. SPACE WAITS.",
+			"B THROWS A BOMB. R RESTARTS THE",
+			"LEVEL, WHICH COSTS A LIFE.",
+			"EVERYTHING COSTS A LIFE.",
+			"",
+			"THE DEVELOPER WOULD LIKE IT ON",
+			"RECORD THAT THIS IS FINE.",
+		},
+		signs = {
+			{
+				"A SIGN",
+				"",
+				"IT HAS BEEN HERE SINCE THE LORE",
+				"WAS INVENTED, WHICH WAS TUESDAY.",
+				"",
+				"IT READS: KEYS OPEN DOORS OF",
+				"THEIR OWN COLOR. YELLOW IS FOR",
+				"THE WAY ON. RED AND BLUE ARE FOR",
+				"PEOPLE WHO STARE AT WALLS.",
+				"",
+				"THIS SIGN WAS SPONSORED BY",
+				"CLICK THE YELLOW RHOMBUS.",
+				"THE RHOMBUS DID NOT COMMENT.",
+				"IT IS A RHOMBUS.",
+			},
+		},
+	},
+	{
+		name = "COMPOST",
+		rows = {
+			"############",
+			"#@..#.....y#",
+			"#...^..S..$#",
+			"#...#.....$#",
+			"#.##########",
+			"#...=.O.=.p#",
+			"#.h...O....#",
+			"##########G#",
+			"#R........$#",
+			"#*#.......##",
+			"#.#......YX#",
+			"############",
+		},
+		intro = {
+			"LEVEL 2: THE COMPOST WING",
+			"",
+			"FOUR EX-COMMANDOS WITH A VAN",
+			"ONCE RAIDED THIS WING. THEY",
+			"WELDED A TANK OUT OF ONE BLOCK.",
+			"IT FELL IN A PIT. THE PIT HAS",
+			"BEEN LOAD BEARING EVER SINCE.",
+			"THEY WERE CALLED THE B-SQUAD.",
+			"THERE WAS NO A-SQUAD. ASK NO",
+			"FURTHER.",
+			"",
+			"PUSH BLOCKS INTO PITS. STAND ON",
+			"PLATES. WATCH THE TURN COUNTER.",
+			"SPIKES KEEP TIME. SO DO YOU,",
+			"FOR NOW.",
+		},
+		carries = {.None},
+	},
+	{
+		name = "BUS STOP",
+		rows = {
+			"############",
+			"#@..o..#...#",
+			"#......#./.#",
+			"s......>..E#",
+			"#......#...#",
+			"#c######.###",
+			"#*#........#",
+			"#$#..O..g..#",
+			"###........n",
+			"#.....+....#",
+			"#X.........#",
+			"############",
+		},
+		intro = {
+			"LEVEL 3: THE BUS STOP",
+			"",
+			"A GHOST WAITS HERE FOR A BUS.",
+			"THE BUS IS NOT COMING. IT HAS",
+			"NEVER COME. NOBODY HAS TOLD IT,",
+			"OUT OF RESPECT FOR BUS",
+			"ANTICIPATOR OF SPLORR!!.",
+			"",
+			"A HANDYMAN NAMED MCGUFFIN ONCE",
+			"FIXED THE ARROW TRAP HERE WITH",
+			"A PAPERCLIP. IT HAS WORKED TOO",
+			"WELL SINCE. GHOSTS FOLLOW YOU.",
+			"PITS DO NOT. THE EYE IS ONLY",
+			"LOOKING. IT LOOKS HARD.",
+		},
+		carries = {.None, .Potion},
+	},
+}
