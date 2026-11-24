@@ -198,5 +198,45 @@ level_three_walkthrough :: proc(t: ^testing.T) {
 	defer free(g)
 	start(g, 2)
 	run(g, "EEEWWWS.SSoSSSNNNEEEEENEENEW..SSSSSSSSWWWWWWWS")
+	testing.expect_value(t, g.level, 3)
+	testing.expect_value(t, g.phase, Phase.Lore)
+}
+
+@(test)
+level_four_walkthrough :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 3)
+	// Coin, through the crumbling floor, the pick, the slime (it drops the shield), over the
+	// crumbling bridge, dig west, dig to the gem and the last coin, down to the stairs.
+	run(g, "SSEEEEENEENEESSWSSSWWSSSSSSEWWWNWWWNNNWWWSSSS")
+	testing.expect_value(t, g.p.money, 4 * COIN_VALUE)
+	testing.expect_value(t, g.p.shield, 1)
+	testing.expect(t, g.p.pick, "the pick")
+	found, _ := gems_in_block(g)
+	testing.expect_value(t, found, 1)
+	run(g, "S")
 	testing.expect_value(t, g.phase, Phase.Won)
+}
+
+@(test)
+crumbling_floor_holds_once :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 3)
+	run(g, "SSEEEEE") // over the crumbling floor at (5, 3), now at (6, 3)
+	testing.expect_value(t, g.terrain[3][5], Terrain.Pit)
+	run(g, "W")
+	testing.expect_value(t, g.phase, Phase.Dead)
+	testing.expect_value(t, g.death, "FELL")
+}
+
+@(test)
+rubble_needs_the_pick :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 3)
+	run(g, "SSESS") // (3, 4), under it the rubble at (3, 5)
+	testing.expect_value(t, g.y, 4)
+	testing.expect_value(t, g.terrain[5][3], Terrain.Rubble)
 }

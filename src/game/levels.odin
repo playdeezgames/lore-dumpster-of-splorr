@@ -21,7 +21,7 @@ Level :: struct {
 	dark:    bool,
 }
 
-LEVEL_COUNT :: 3
+LEVEL_COUNT :: 4
 
 TITLE_PAGE := []string {
 	"LORE DUMPSTER OF SPLORR!!",
@@ -48,7 +48,7 @@ WON_PAGE := []string {
 	"THE PART OF THE VAULT THAT HAS",
 	"BEEN BUILT. THE REST IS LORE.",
 	"",
-	"TWENTY-SEVEN MORE LEVELS ARE",
+	"TWENTY-SIX MORE LEVELS ARE",
 	"BEING DUMPED. THE LORE IS",
 	"ALREADY THERE, WAITING, LIKE",
 	"THE MILLIONTH SHEEP IN COUNTING",
@@ -192,5 +192,40 @@ LEVELS := [LEVEL_COUNT]Level {
 			"LOOKING. IT LOOKS HARD.",
 		},
 		carries = {.None, .Potion},
+	},
+	{
+		name = "QUARRY",
+		rows = {
+			"############",
+			"#@...#h...t#",
+			"#....#.....#",
+			"#.$..u...Z.#",
+			"#....#.....#",
+			"###%##.....#",
+			"#*%.#OOuOOO#",
+			"#%%.#..$...#",
+			"#$..#......#",
+			"#...%......#",
+			"#X..#...$..#",
+			"############",
+		},
+		intro = {
+			"LEVEL 4: THE QUARRY",
+			"",
+			"A STUNTMAN CALLED THE TUMBLE",
+			"GUY ONCE JUMPED A TRUCK ACROSS",
+			"THIS ROOM. THE FLOOR KEPT THE",
+			"TRUCK. HE STILL SENDS IT",
+			"POSTCARDS.",
+			"",
+			"FIND A PICK. DIG THE RUBBLE.",
+			"SOME FLOOR HOLDS YOU ONCE AND",
+			"THEN HAS OTHER PLANS.",
+			"",
+			"THE BEAVERS OF BEAVER HUNTERS",
+			"OF SPLORR!! DUG THIS ROOM. THEY",
+			"LEFT NO PELTS. GROWTH MINDSET.",
+		},
+		carries = {.Shield},
 	},
 }
