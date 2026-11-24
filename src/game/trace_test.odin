@@ -25,6 +25,11 @@ trace :: proc(t: ^testing.T) {
 			m := &g.monsters[j]
 			fmt.printf(" %v(%d,%d)%s", m.kind, m.x, m.y, "x" if m.dead else "")
 		}
+		for b in g.boulders {
+			if b.live {
+				fmt.printf(" O(%d,%d)", b.x, b.y)
+			}
+		}
 		fmt.printf(" lvl%d %s\n", g.level, g.death)
 		_ = ms
 	}

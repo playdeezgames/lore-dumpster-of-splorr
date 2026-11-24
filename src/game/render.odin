@@ -97,6 +97,8 @@ terrain_gfx :: proc(g: ^Game, x, y: int) -> Gfx {
 		return .Arrow_Left
 	case .One_Way_E:
 		return .Arrow_Right
+	case .Boulder_Trigger:
+		return .Boulder_Trigger
 	}
 	return .Floor
 }
@@ -155,6 +157,9 @@ draw_room :: proc(f: ^Frame, g: ^Game) {
 			if burning(g, x, y) {
 				draw_gfx(f, .Flame, x * CELL, y * CELL)
 			}
+			if crusher_shut(g, x, y) {
+				draw_gfx(f, .Crusher_Shut, x * CELL, y * CELL)
+			}
 		}
 	}
 	for i in 0 ..< g.item_count {
@@ -167,6 +172,11 @@ draw_room :: proc(f: ^Frame, g: ^Game) {
 		m := &g.monsters[i]
 		if !m.dead && shown(g, m.x, m.y) {
 			draw_gfx(f, MONSTER_GFX[m.kind], m.x * CELL, m.y * CELL)
+		}
+	}
+	for b in g.boulders {
+		if b.live && shown(g, b.x, b.y) {
+			draw_gfx(f, .Boulder, b.x * CELL, b.y * CELL)
 		}
 	}
 	for a in g.arrows {

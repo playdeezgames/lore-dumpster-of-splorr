@@ -24,6 +24,8 @@ LOG_LINES :: 6
 SPIKE_PERIOD :: 3
 ARROW_PERIOD :: 4
 FIRE_PERIOD :: 4
+CRUSHER_PERIOD :: 4 // shut on the second turn of every four
+MAX_BOULDERS :: 4
 
 Command :: enum u8 {
 	North,
@@ -62,6 +64,7 @@ Terrain :: enum u8 {
 	One_Way_S,
 	One_Way_W,
 	One_Way_E,
+	Boulder_Trigger, // a slightly raised stone: stepping on it lets the boulders out of their alcoves
 }
 
 Item_Kind :: enum u8 {
@@ -122,6 +125,12 @@ Arrow :: struct {
 	live:         bool,
 }
 
+// A boulder rolls one cell a turn until something solid stops it; then it is a block.
+Boulder :: struct {
+	x, y, dx, dy: int,
+	live:         bool,
+}
+
 Ids :: bit_set[0 ..< 64;u64]
 
 // What has happened in one level: taken things (by id), slain monsters, opened doors. The run's copy
@@ -175,6 +184,8 @@ Game :: struct {
 	monsters:      [MAX_MONSTERS]Monster,
 	monster_count: int,
 	arrows:        [MAX_ARROWS]Arrow,
+	boulders:      [MAX_BOULDERS]Boulder,
+	alcove_full:   [ROOM][ROOM]bool, // an alcove still holding its boulder
 	run, banked:   [MAX_LEVELS]Record,
 	entry_player:  Player, // the player on entering this level: a restart puts it back (not the lives)
 	entry_record:  Record,
@@ -263,6 +274,8 @@ build_level :: proc(g: ^Game) {
 	g.items = {}
 	g.monsters = {}
 	g.arrows = {}
+	g.boulders = {}
+	g.alcove_full = {}
 	g.item_count = 0
 	g.monster_count = 0
 	g.turn = 0
@@ -289,6 +302,9 @@ build_level :: proc(g: ^Game) {
 				t = .Fake_Wall
 			case 'a':
 				t = .Alcove
+				g.alcove_full[y][x] = true
+			case 'k':
+				t = .Boulder_Trigger
 			case 'h':
 				t = .Hidden_Pit
 			case 'u':
@@ -532,7 +548,36 @@ solid :: proc(g: ^Game, x, y: int) -> bool {
 	case .Gate:
 		return !gate_open(g)
 	}
-	return g.block[y][x] || item_at(g, x, y, .Sign) >= 0
+	return g.block[y][x] || item_at(g, x, y, .Sign) >= 0 || crusher_shut(g, x, y) || boulder_at(g, x, y) >= 0
+}
+
+// A crusher is a floor cell between two seams (west and east, or north and south). Its walls slam
+// shut on one turn in four, unless a block jams them.
+is_crusher :: proc(g: ^Game, x, y: int) -> bool {
+	if !in_room(x, y) || g.terrain[y][x] != .Floor {
+		return false
+	}
+	seam :: proc(g: ^Game, x, y: int) -> bool {
+		return in_room(x, y) && g.terrain[y][x] == .Seam
+	}
+	return (seam(g, x - 1, y) && seam(g, x + 1, y)) || (seam(g, x, y - 1) && seam(g, x, y + 1))
+}
+
+crusher_closed :: proc(turn: int) -> bool {
+	return turn % CRUSHER_PERIOD == 1
+}
+
+crusher_shut :: proc(g: ^Game, x, y: int) -> bool {
+	return crusher_closed(g.turn) && !g.block[y][x] && is_crusher(g, x, y)
+}
+
+boulder_at :: proc(g: ^Game, x, y: int) -> int {
+	for b, i in g.boulders {
+		if b.live && b.x == x && b.y == y {
+			return i
+		}
+	}
+	return -1
 }
 
 // The first open neighbour of a slot or nozzle: the way it faces.
@@ -758,12 +803,22 @@ step :: proc(g: ^Game, dx, dy: int) {
 			play(g, .Bump)
 			return
 		}
+	case .Floor:
+		if crusher_shut(g, nx, ny) {
+			say(g, "SHUT")
+			play(g, .Bump)
+			return
+		}
 	case .One_Way_N, .One_Way_S, .One_Way_W, .One_Way_E:
 		if !one_way_allows(t, dx, dy) {
 			say(g, "ONE WAY")
 			play(g, .Bump)
 			return
 		}
+	}
+	if boulder_at(g, nx, ny) >= 0 {
+		play(g, .Bump)
+		return
 	}
 	if g.block[ny][nx] {
 		bx, by := nx + dx, ny + dy
@@ -805,11 +860,63 @@ step :: proc(g: ^Game, dx, dy: int) {
 		}
 	}
 	pick_up(g)
+	if t == .Boulder_Trigger {
+		release_boulders(g)
+	}
 	if t == .Stairs {
 		clear_level(g)
 		return
 	}
 	end_turn(g)
+}
+
+// Every alcove still holding a boulder lets it out, into the cell the alcove faces.
+release_boulders :: proc(g: ^Game) {
+	for y in 0 ..< ROOM {
+		for x in 0 ..< ROOM {
+			if !g.alcove_full[y][x] {
+				continue
+			}
+			dx, dy := facing(g, x, y)
+			if dx == 0 && dy == 0 {
+				continue
+			}
+			for &b in g.boulders {
+				if !b.live {
+					g.alcove_full[y][x] = false
+					play(g, .Boulder)
+					say(g, "RUMBLE", RED)
+					b = Boulder{x, y, dx, dy, true} // it leaves the alcove at the end of this turn
+					break
+				}
+			}
+		}
+	}
+}
+
+// A boulder rolls a cell: into a pit (and fills it), over anyone in the way, or stops as a block.
+roll :: proc(g: ^Game, b: ^Boulder) {
+	nx, ny := b.x + b.dx, b.y + b.dy
+	if solid(g, nx, ny) || boulder_at(g, nx, ny) >= 0 {
+		b.live = false
+		if g.terrain[b.y][b.x] != .Alcove {
+			g.block[b.y][b.x] = true
+		}
+		return
+	}
+	b.x, b.y = nx, ny
+	t := g.terrain[ny][nx]
+	if t == .Pit || t == .Hidden_Pit {
+		g.terrain[ny][nx] = .Filled_Pit
+		b.live = false
+		say(g, "FILLED")
+	}
+	if mi := monster_at(g, nx, ny); mi >= 0 {
+		slay(g, &g.monsters[mi])
+	}
+	if g.x == nx && g.y == ny && g.phase == .Play {
+		die(g, "SQUASHED")
+	}
 }
 
 one_way_allows :: proc(t: Terrain, dx, dy: int) -> bool {
@@ -831,7 +938,7 @@ block_can_enter :: proc(g: ^Game, x, y: int) -> bool {
 		return false
 	}
 	#partial switch g.terrain[y][x] {
-	case .Floor, .Plate, .Spikes, .Crumble, .Hidden_Pit, .Pit, .Filled_Pit, .Gate:
+	case .Floor, .Plate, .Spikes, .Crumble, .Hidden_Pit, .Pit, .Filled_Pit, .Gate, .Boulder_Trigger:
 		return true
 	}
 	return false
@@ -1039,6 +1146,15 @@ ghost_step :: proc(g: ^Game, m: ^Monster) {
 }
 
 run_traps :: proc(g: ^Game) {
+	// Boulders roll a cell.
+	for &b in g.boulders {
+		if b.live {
+			roll(g, &b)
+		}
+	}
+	if g.phase != .Play {
+		return
+	}
 	// Arrows in flight move a cell.
 	for &a in g.arrows {
 		if !a.live {
@@ -1083,11 +1199,14 @@ run_traps :: proc(g: ^Game) {
 		if m.dead {
 			continue
 		}
-		if (up && g.terrain[m.y][m.x] == .Spikes) || burning(g, m.x, m.y) {
+		if (up && g.terrain[m.y][m.x] == .Spikes) || burning(g, m.x, m.y) || crusher_shut(g, m.x, m.y) {
 			slay(g, m)
 		}
 	}
-	if up && g.terrain[g.y][g.x] == .Spikes {
+	if crusher_shut(g, g.x, g.y) {
+		play(g, .Crusher)
+		die(g, "CRUSHED")
+	} else if up && g.terrain[g.y][g.x] == .Spikes {
 		die(g, "SPIKED")
 	} else if burning(g, g.x, g.y) {
 		die(g, "BURNT")

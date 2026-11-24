@@ -253,6 +253,115 @@ level_six_walkthrough :: proc(t: ^testing.T) {
 	found, _ := gems_in_block(g)
 	testing.expect_value(t, found, 1)
 	run(g, "S")
+	testing.expect_value(t, g.level, 6)
+	testing.expect_value(t, g.phase, Phase.Lore)
+}
+
+@(test)
+level_seven_walkthrough :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 6)
+	// The coin, the slime and its room's coin, wait by the crushers, through, the gem and a coin,
+	// down the crusher shaft, the last coin, the stairs.
+	run(g, "EEESWWSSSSSSSNNNEEE...EEE.EENNNWWWEEESSSSSSSSSWWWW")
+	testing.expect_value(t, g.p.money, 4 * COIN_VALUE)
+	found, _ := gems_in_block(g)
+	testing.expect_value(t, found, 1)
+	run(g, "W")
+	testing.expect_value(t, g.level, 7)
+	testing.expect_value(t, g.phase, Phase.Lore)
+}
+
+@(test)
+crusher_crushes_and_a_block_jams_it :: proc(t: ^testing.T) {
+	// Level 7: (6, 4) and (7, 4) shut on turns 1, 5, 9...
+	g := new(Game)
+	defer free(g)
+	start(g, 6)
+	testing.expect(t, is_crusher(g, 6, 4), "between two seams")
+	testing.expect(t, !is_crusher(g, 8, 4), "plain walls")
+	run(g, "EEESWWSSSSSSSNNNEEEEE") // into (6, 4) on turn 19, (7, 4) on 20, still there on 21
+	testing.expect_value(t, g.phase, Phase.Dead)
+	testing.expect_value(t, g.death, "CRUSHED")
+	g.turn = 1
+	testing.expect(t, crusher_shut(g, 6, 4), "shut on turn 1")
+	g.block[4][6] = true
+	testing.expect(t, !crusher_shut(g, 6, 4), "a block jams it")
+}
+
+@(test)
+level_eight_walkthrough :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 7)
+	// The coin, down to the corridor, onto the raised stone and back up out of the way: the boulder
+	// rolls west and fills the pit. Then the coin and the gem by the eye, the room below, the stairs.
+	run(g, "EESESSSSEWN......SEEEENNNWEEENNSSWWSSSWWSSWWWWWSSEEEEEEEEENNWWWWNNWWWW")
+	testing.expect_value(t, g.terrain[6][3], Terrain.Filled_Pit)
+	testing.expect_value(t, g.p.money, 4 * COIN_VALUE)
+	found, _ := gems_in_block(g)
+	testing.expect_value(t, found, 1)
+	run(g, "W")
+	testing.expect_value(t, g.level, 8)
+	testing.expect_value(t, g.phase, Phase.Lore)
+}
+
+@(test)
+boulder_squashes :: proc(t: ^testing.T) {
+	// Level 8: stand on the raised stone and stay in the boulder's way.
+	g := new(Game)
+	defer free(g)
+	start(g, 7)
+	run(g, "EESESSSSE")
+	testing.expect(t, boulder_at(g, 10, 6) >= 0, "out of its alcove")
+	run(g, "W.....")
+	testing.expect_value(t, g.phase, Phase.Dead)
+	testing.expect_value(t, g.death, "SQUASHED")
+}
+
+@(test)
+level_nine_walkthrough :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 8)
+	// The block onto the plate opens the gate; the gem past two spikes; both coins; one way down;
+	// a coin; the block into the pit; a coin; past two more spikes to the stairs.
+	run(g, "ESSEEEEENN.EEEWWWSSSWEEEWWWSSSWWWWSNENEEEEESSSNNNEE..SSS")
+	testing.expect_value(t, g.p.money, 4 * COIN_VALUE)
+	found, _ := gems_in_block(g)
+	testing.expect_value(t, found, 1)
+	run(g, "S")
+	testing.expect_value(t, g.level, 9)
+	testing.expect_value(t, g.phase, Phase.Lore)
+}
+
+@(test)
+one_way_floor_has_no_way_back :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 8)
+	run(g, "ESSEEEESSS") // through the gate, down the one-way floor at (6, 5)
+	testing.expect_value(t, g.y, 6)
+	run(g, "N")
+	testing.expect_value(t, g.y, 6)
+}
+
+@(test)
+level_ten_walkthrough :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 9)
+	// The coin, a bomb, a bomb and a coin, the raised stone (the boulder squashes the slime in the
+	// lane and fills the pit), bomb the eye for the yellow key, bomb the cracked wall for the gem,
+	// the coin, the fake wall's red key (for later), down the lane, the coin, the crusher, the
+	// yellow door, the stairs.
+	run(g, "EEESSWWEEEENESSNNNEWSSWWWWWSSSoSSWoSSNNEEEWSSNNWNNNNNEEEEEEESSSSSEWWW.SSEEE")
+	testing.expect_value(t, g.p.money, 4 * COIN_VALUE)
+	testing.expect_value(t, g.p.keys[1], 1) // the red key goes on to the next block
+	found, _ := gems_in_block(g)
+	testing.expect_value(t, found, 1)
+	run(g, "E")
 	testing.expect_value(t, g.phase, Phase.Won)
 }
 
@@ -314,4 +423,36 @@ rubble_needs_the_pick :: proc(t: ^testing.T) {
 	run(g, "SSESS") // (3, 4), under it the rubble at (3, 5)
 	testing.expect_value(t, g.y, 4)
 	testing.expect_value(t, g.terrain[5][3], Terrain.Rubble)
+}
+
+// The whole first block from the title, carrying everything from level to level (so fights take
+// fewer blows than in the one-level walkthroughs). The scripts are the browser playthrough's too.
+FULL_RUN := [LEVEL_COUNT]string {
+	"SSSSEEEEEEESSSSWWWWWWEEEEEENNNNWWNNNEEENEE", // with the red key from the secret room
+	"SEEEENEEEEESSNWWWWW.WWWWSSSEEEEEEEESESSWWWWWWWWWWSNEEEEEEEESSSE", // and the red door's gem
+	"EEEWWWS..SSoSSSNNNEEEEENEENEW..SSSSSSSSWWWWWWW",
+	"SSEEEEENEENEESSWSSSWWSSSSSSEWWWNWWWNNNWWWSSSSS",
+	"EESEESWWEEEEWWNNEEEEESSSSWSSWWWWWWWWEEESSWWWWEEEEEEEEEES",
+	"EESEEEEENEESSSWWESSWWWSSWWEENN.WWWWSSWoSSNNENNEEEEEEEESSSWWWSNENNNW.WWWSSSS",
+	"EEESWWSSS.SSSNNNEEE...EEE.EENNNWWWEEESSSSSSSSSWWWWW", // the sword kills the slime in one blow
+	"EESESSSSEWN......SEEEENNNWEEENNSSWWSSSWWSSWWWWWSSEEEEEEEEENNWWWWNNWWWWW",
+	"ESSEEEEENN.EEEWWWSSSWEEEWWWSSSWWWWSNENEEEEESSSNNNEE..SSSS",
+	"EEESSWWEEEENESSNNNEWSSWWWWWSSSoSSWoSSNNEEEWSSNNWNNNNNEEEEEEESSSSSEWWW.SSEEEE",
+}
+
+@(test)
+full_run :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	init_game(g)
+	command(g, .Ok) // the title
+	for script, i in FULL_RUN {
+		testing.expectf(t, g.level == i && g.phase == .Lore, "level %d: on level %d, %v", i + 1, g.level + 1, g.phase)
+		command(g, .Ok) // the intro
+		run(g, script)
+	}
+	testing.expect_value(t, g.phase, Phase.Won)
+	testing.expect_value(t, g.lives, START_LIVES + 1) // level 6's 1UP, and no deaths
+	found, total := gems_in_block(g)
+	testing.expect_value(t, found, total)
 }
