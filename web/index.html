@@ -35,7 +35,7 @@
 	<button data-c="5">BOMB</button><button data-c="6">RESET</button>
 </div>
 <footer>
-	Lore Dumpster of SPLORR!! by TheGrumpyGameDev. Made by an AI agent (Claude Code) at the author's direction; art and sound made in the Anvil of SPLORR!!, font from the Anvil.
+	Lore Dumpster of SPLORR!! by TheGrumpyGameDev. Feedback by LootLocker. Made by an AI agent (Claude Code) at the author's direction; art and sound made in the Anvil of SPLORR!!, font from the Anvil.
 	Arrows/WASD move, Space waits or goes on, B bomb, R restart (costs a life), Esc/N no.
 	<a href="#" id="feedback-link">Send feedback (F)</a> · <a href="https://thegrumpygamedev.itch.io/">itch.io</a> · <a href="https://playdeezgames.github.io/oeuvre-of-splorr/">more games</a>
 </footer>
@@ -47,9 +47,10 @@
 	const canvas = document.getElementById("screen");
 	const ctx = canvas.getContext("2d");
 
-	// Feedback through the shared SPLORR!! LootLocker kit; no LootLocker game is set up yet, so the form
-	// opens but cannot send until domain and key are filled in.
-	const ll = LootLocker({ domain: "", key: "", version: "0.0.1", idKey: "lore-dumpster-ll-player" });
+	// Feedback through the shared SPLORR!! LootLocker kit (LootLocker game 109025, set up November 24, 2026:
+	// Guest Login, CORS for Pages, itch and localhost:8154, game categories Suggestion, Bug and Other).
+	// The key is the public client key.
+	const ll = LootLocker({ domain: "https://neemfzgm.api.lootlocker.com", key: "dev_0c219fbc41f448d99df2f49253a6f5c6", version: "0.0.1", idKey: "lore-dumpster-ll-player" });
 	const feedback = ll.feedbackDialog({ game: "Lore Dumpster of SPLORR!!" });
 	document.getElementById("feedback-link").addEventListener("click", (e) => { e.preventDefault(); feedback.open(); });
 
