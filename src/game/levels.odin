@@ -21,7 +21,7 @@ Level :: struct {
 	dark:    bool,
 }
 
-LEVEL_COUNT :: 5
+LEVEL_COUNT :: 6
 
 TITLE_PAGE := []string {
 	"LORE DUMPSTER OF SPLORR!!",
@@ -48,7 +48,7 @@ WON_PAGE := []string {
 	"THE PART OF THE VAULT THAT HAS",
 	"BEEN BUILT. THE REST IS LORE.",
 	"",
-	"TWENTY-FIVE MORE LEVELS ARE",
+	"TWENTY-FOUR MORE LEVELS ARE",
 	"BEING DUMPED. THE LORE IS",
 	"ALREADY THERE, WAITING, LIKE",
 	"THE MILLIONTH SHEEP IN COUNTING",
@@ -263,5 +263,39 @@ LEVELS := [LEVEL_COUNT]Level {
 			"DARK SEES A BIT MORE THAN THAT.",
 		},
 		carries = {.Key_Yellow},
+	},
+	{
+		name = "KITCHEN",
+		rows = {
+			"############",
+			"#@.$.#...o.#",
+			"#..........#",
+			"n..........#",
+			"#....#..$..#",
+			"####.####.##",
+			"#..........#",
+			"##.##n.#n#.#",
+			"#$.#/..#...#",
+			"#c.#...#.E.#",
+			"#*##..X#.$.#",
+			"############",
+		},
+		intro = {
+			"LEVEL 6: THE KITCHEN",
+			"",
+			"THE OVENS WERE PUT IN BY THE",
+			"SAMMICH MAKERS OF SPLORR!!, WHO",
+			"NEEDED THE BREAD TOASTED, THE",
+			"HALLWAY TOASTED, AND YOU.",
+			"",
+			"TWO DETECTIVES IN PASTEL SUITS",
+			"ONCE WORKED THIS KITCHEN. THEY",
+			"CALLED IT KITCHEN VICE. THEY",
+			"NEVER CLOSED A CASE. THEY DID",
+			"CLOSE THE OVEN, ONCE.",
+			"",
+			"JETS BURN TWO TURNS IN FOUR.",
+		},
+		carries = {.Oneup},
 	},
 }

@@ -234,7 +234,39 @@ level_five_walkthrough :: proc(t: ^testing.T) {
 	found, _ := gems_in_block(g)
 	testing.expect_value(t, found, 1)
 	run(g, "S")
+	testing.expect_value(t, g.level, 5)
+	testing.expect_value(t, g.phase, Phase.Lore)
+}
+
+@(test)
+level_six_walkthrough :: proc(t: ^testing.T) {
+	g := new(Game)
+	defer free(g)
+	start(g, 5)
+	// The coin, the bomb, across the top jet, the coin, down past both floor jets to the sword,
+	// back west to bomb the cracked wall for the gem, east to the eye (it carries a 1UP) and its
+	// coin, back past the jet to the stairs.
+	run(g, "EESEEEEENEESSSWWESSWWWSSWWEENN.WWWWSSWoSSNNENNEEEEEEEESSSWWWSNENNNW.WWWSSS")
+	testing.expect_value(t, g.p.money, 4 * COIN_VALUE)
+	testing.expect_value(t, g.p.sword, 1)
+	testing.expect_value(t, g.lives, START_LIVES + 1)
+	found, _ := gems_in_block(g)
+	testing.expect_value(t, found, 1)
+	run(g, "S")
 	testing.expect_value(t, g.phase, Phase.Won)
+}
+
+@(test)
+floor_jet_burns :: proc(t: ^testing.T) {
+	// Level 6: the jet from the nozzle at (8, 7) covers (8, 6) on turns 2 and 3 of every 4.
+	g := new(Game)
+	defer free(g)
+	start(g, 5)
+	run(g, "EESEEEEENEESSSWWESSW.")
+	testing.expect_value(t, g.phase, Phase.Play)
+	run(g, ".")
+	testing.expect_value(t, g.phase, Phase.Dead)
+	testing.expect_value(t, g.death, "BURNT")
 }
 
 @(test)
