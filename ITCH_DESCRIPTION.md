@@ -1,6 +1,6 @@
 # itch.io page copy: Lore Dumpster of SPLORR!!
 
-Page: https://thegrumpygamedev.itch.io/lore-dumpster-of-splorr (does not exist yet; the slug is a guess until it does). First release booked in Coxswain for December 4, 2026 (#41), as a demo; ship only on the user's "ship".
+Page: https://thegrumpygamedev.itch.io/lore-dumpster-of-splorr (created as a **Draft** through Chrome on November 25, 2026, edit id 5442080, with this copy, the cover, six screenshots (00, 03, 06, 07, 08, 10) and the settings below, all read back after save; it shows "No file provided to embed" until the first butler push). First release booked in Coxswain for December 4, 2026 (#41), as a demo; ship only on the user's "ship".
 **Draft, written November 25, 2026; the user has not approved any of it.** Pasted in by hand; nothing here is published by the repo. Cover: `assets/cover.png` (630 by 500, the title over the kitchen's fire jets). Screenshots: `assets/screenshots/00-title.png` to `10-dock.png` (the game's screen at 4x, 512 by 384); pick five or six (suggested: 00, 03, 06, 07, 08, 10).
 
 ## Short description (the one-line field)
